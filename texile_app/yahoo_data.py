@@ -28,8 +28,8 @@ def y_data_1(request):
     for i in seven_day:
         result=data1.filter(date=i)
         if(len(result)):
-          data2.append(result)
-    print("data1111111111",data2[0])
+          data2.extend(result)
+    # print("data1111111111",data2)
     # data3=[]
     # for i in reversed (range(len(data1)-1,len(data1)-8,-1)):
      
@@ -38,11 +38,11 @@ def y_data_1(request):
         
     data5=[]
     for n in data2:
-        set_data=[]
-        for i in n:
-            temp=[i.time,i.data]
-            set_data.append(temp)
-        data5.append(set_data)
+        # set_data=[]
+        # for i in n:
+            temp=[n.time,n.data]
+            # set_data.append(temp)
+            data5.append(temp)
     # print("data55555555555",data5)
     
     final_date=[]
@@ -75,49 +75,49 @@ def y_data_1(request):
     ###########################################################################
     ##########################################################################
     for n in data5:
-        for i in n:
+        # for i in n:
            
-            date=i[0]
+            date=n[0]
             pattern = '%Y-%m-%d %H:%M:%S'
             epoch = int(time.mktime(time.strptime(date, pattern)))
-            print("iiiiiiiiii",i[0])
-            i[0] = epoch*1000   
-            if i[1]!=None:
-              i[1] = float(i[1])       
-    print("fina_data",data5)
+            # print("iiiiiiiiii",n[0])
+            n[0] = epoch*1000   
+            if n[1]!=None:
+              n[1] = float(n[1])       
+    # print("fina_data",data5)
     ##########################################OLD Code#################################
-    # yahoo_obj = yahoo_data.objects.all().filter(chart = chart , chart_type = "1week")
-    # data = []
-    # for n in yahoo_obj:
-    #     temp= [n.date, n.data]
-    #     data.append(temp)
-    # date = []
-    # final_data = []
-    # for i in data:
-    #     i[0] = i[0].replace("/","-")
-    #     date.append(i[0])
+    yahoo_obj = yahoo_data.objects.all().filter(chart = chart , chart_type = "1week")
+    data = []
+    for n in yahoo_obj:
+        temp= [n.date, n.data]
+        data.append(temp)
+    date = []
+    final_data = []
+    for i in data:
+        i[0] = i[0].replace("/","-")
+        date.append(i[0])
    
-    # date.sort(key = lambda date: datetime.strptime(date, '%m-%d-%Y'))
+    date.sort(key = lambda date: datetime.strptime(date, '%m-%d-%Y'))
    
-    # # print(date)
-    # final_data = []
-    # for i in date:
-    #     for j in data:
-    #         if j[0] == i:
-    #             tmp = []
-    #             tmp.append(i)
-    #             tmp.append(j[1])
-    #             final_data.append(tmp)
-    #             break
+    # print(date)
+    final_data = []
+    for i in date:
+        for j in data:
+            if j[0] == i:
+                tmp = []
+                tmp.append(i)
+                tmp.append(j[1])
+                final_data.append(tmp)
+                break
 
-    # for i in final_data:
-    #     date = i[0] ##+ " 00:00:00"
-    #     pattern = '%m-%d-%Y' # %H:%M:%S'
-    #     epoch = int(time.mktime(time.strptime(date, pattern)))
-    #     i[0] = epoch*1000
-    #     if i[1]!=None:
-    #         i[1] = float(i[1])
-    # print ("final data",final_data)
+    for i in final_data:
+        date = i[0] ##+ " 00:00:00"
+        pattern = '%m-%d-%Y' # %H:%M:%S'
+        epoch = int(time.mktime(time.strptime(date, pattern)))
+        i[0] = epoch*1000
+        if i[1]!=None:
+            i[1] = float(i[1])
+    print ("final data",final_data)
     return Response(data5)
 
 @api_view(['POST'])
