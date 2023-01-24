@@ -47,7 +47,7 @@ def y_ts_hourly_pull(request):
     for i in range(0,l):
       temp_list = [list_date[i],list_data[i],list_time[i]]
       final_data.append(temp_list)
-    # print("final data",final_data)
+    print("final data",final_data)
     for n in final_data:
         # print(n[1])
        y_data = y_data_ts(chart_type = '1week' , data = n[1], date = n[0],time=n[2])
