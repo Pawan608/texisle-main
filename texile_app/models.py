@@ -318,7 +318,7 @@ class customMessage(models.Model):
     message = models.CharField(max_length=10000, default="")
     # def __str__(self):
     #     return f"{self.title}+{self.message}"
-class y_data_hourly(models.Model):
+class y_data_ts(models.Model):
     chart = models.CharField(max_length=10, default="")
     chart_type = models.CharField(max_length=10, default="")
     data = models.CharField(max_length=10, default="")

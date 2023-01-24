@@ -41,38 +41,65 @@ def y_finance(comp):
     yahoo_data.objects.filter(chart = comp).delete()
     print("start pulling data for", comp)
     #1 week
-    y_data_hourly.objects.filter(chart = comp).delete()
-    co_obj = yf.Ticker('TS')
+    co_obj = yf.Ticker(comp)
     list_date = []
     list_data = []
-    list_time=[]
     final_data = []
-    hist = co_obj.history(interval="1h")
-    # print(hist.index.array)
-    date=hist.index.array
-    # print(date)
+    hist = co_obj.history(period="1wk")
     data = hist["Close"]
-    for i in range(len(date)):
-        # print(data[i],date[i])
-        date_final = datetime.strptime(str(date[i]), "%Y-%m-%d %H:%M:%S-%V:%W").strftime("%Y-%m-%d")
-        
-        time_final = datetime.strptime(str(date[i]), "%Y-%m-%d %H:%M:%S-%V:%W").strftime("%Y-%m-%d %H:%M:%S")
-        # print(time_final)
-        list_date.append(date_final)
-        # print(list_date)
-        list_time.append(time_final)
-        list_data.append(round(data[i],2))
-    # print(date,final_data)
+    hist.reset_index(inplace = True)
+    for each in hist["Date"]:
+        date = datetime.strptime(str(each), "%Y-%m-%d %H:%M:%S").strftime('%m-%d-%Y')
+        list_date.append(date)
+    for each in data:
+        data = round(each,2)
+        list_data.append(data)
     l = len(list_data)
     for i in range(0,l):
-      temp_list = [list_date[i],list_data[i],list_time[i]]
-      final_data.append(temp_list)
-    # print("final data",final_data)
+        temp_list = [list_date[i],list_data[i]]
+        final_data.append(temp_list)
+    # print(final_data)
     for n in final_data:
         # print(n[1])
-       y_data = y_data_hourly(chart = comp ,chart_type = '1week' , data = n[1], date = n[0],time=n[2])
-       y_data.save()
+        yahoo_obj = yahoo_data(chart = comp ,chart_type = '1week' , data = n[1], date = n[0])
+        yahoo_obj.save()
     print("1 week done")
+
+    # yahoo_data.objects.filter(chart = comp).delete()
+    # print("start pulling data for", comp)
+    # #1 week
+    # y_data_hourly.objects.filter(chart = comp).delete()
+    # co_obj = yf.Ticker('TS')
+    # list_date = []
+    # list_data = []
+    # list_time=[]
+    # final_data = []
+    # hist = co_obj.history(interval="1h")
+    # # print(hist.index.array)
+    # date=hist.index.array
+    # # print(date)
+    # data = hist["Close"]
+    # for i in range(len(date)):
+    #     # print(data[i],date[i])
+    #     date_final = datetime.strptime(str(date[i]), "%Y-%m-%d %H:%M:%S-%V:%W").strftime("%Y-%m-%d")
+        
+    #     time_final = datetime.strptime(str(date[i]), "%Y-%m-%d %H:%M:%S-%V:%W").strftime("%Y-%m-%d %H:%M:%S")
+    #     # print(time_final)
+    #     list_date.append(date_final)
+    #     # print(list_date)
+    #     list_time.append(time_final)
+    #     list_data.append(round(data[i],2))
+    # # print(date,final_data)
+    # l = len(list_data)
+    # for i in range(0,l):
+    #   temp_list = [list_date[i],list_data[i],list_time[i]]
+    #   final_data.append(temp_list)
+    # # print("final data",final_data)
+    # for n in final_data:
+    #     # print(n[1])
+    #    y_data = y_data_hourly(chart = comp ,chart_type = '1week' , data = n[1], date = n[0],time=n[2])
+    #    y_data.save()
+    # print("1 week done")
 
     # hist.reset_index(inplace = True)
     # for each in hist["Date"]:

@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from .news import *
 # from .data_input_nodejs import *
 from .yahoo_data_input import *
+from .y_ts_hourly_pull import *
 from .yahoo_data import *
 from .tweets import *
 from .future_data_yahoo_charts import *
