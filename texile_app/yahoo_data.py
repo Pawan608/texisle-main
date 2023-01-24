@@ -20,7 +20,7 @@ def y_data_ts_1(request):
     print("function y_data_ts_1 is running")
     today = date.today()
     seven_day=[]
-    for i in [7,6,5,4,3,2,1]:
+    for i in [7,6,5,4,3,2,1,0]:
         seven_days=date(today.year, today.month, today.day-i)
         seven_day.append(seven_days)
     chart = request.data["chart"]
