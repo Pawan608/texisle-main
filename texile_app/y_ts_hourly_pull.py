@@ -35,7 +35,6 @@ def y_ts_hourly_pull(request):
     for i in range(len(date)):
         # print(data[i],date[i])
         date_final = datetime.strptime(str(date[i]), "%Y-%m-%d %H:%M:%S-%V:%W").strftime("%Y-%m-%d")
-        
         time_final = datetime.strptime(str(date[i]), "%Y-%m-%d %H:%M:%S-%V:%W").strftime("%Y-%m-%d %H:%M:%S")
         # print(time_final)
         list_date.append(date_final)

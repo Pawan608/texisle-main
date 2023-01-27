@@ -12,29 +12,38 @@ import requests
 from django.db.models import Count
 import time
 from datetime import date
-
-
+import math
 # Chart data
 @api_view(['POST'])
-def y_data_ts_1(request):
-    print("function y_data_ts_1 is running")
-    today = date.today()
+def y_data_ts_1(request,duration):
+    print("function y_data_ts_1 is running",duration)
+    #####Duration is the interval in minute within which the user wants the periodic data
+    ### As data is coming for every 5 minutes therefore user should give a duration of 5 or above, 
+    ###### in case duration is below 5 then it will automatically be conerted to 5
+    if(duration<5):
+        duration=5
+    ### After every 5 minute data is being updated
+    ### Therefore duration devided by 5 will give the interval 
+    ### Let suppose user wants data after every 20 minutes, then 20/5=4;
+    ### Hence in every 4th position we have the data for time interval of 20 mins
+    interval=math.trunc(duration/5)
     seven_day=[]
-    for i in [7,6,5,4,3,2,1]:
-        seven_days=date(today.year, today.month, today.day-i)
-        seven_day.append(seven_days)
-    chart = request.data["chart"]
-    data1= y_data_ts.objects.all()
-    data2=[]
-    for i in seven_day:
-        result=data1.filter(date=i)
-        if(len(result)):
-          data2.extend(result)
+    today = date.today()
+    date_7_days_ago=datetime(today.year, today.month, today.day-7, 9,0 ,0)
+    data1=hourly_yahoo_data.objects.filter(update_time__gte=date_7_days_ago,chart='TS')
+    data2=[data1[0]]
+    #### To fetch data of the specified interval we are running a simple for loop 
+    for i in range(1,len(data1)-1):
+        if(i!=0):
+            if((i+1)%interval==0):
+                data2.append(data1[i])
+    # print(len(data2),data2[0])
+    #######################Uncomment##################
     data5=[]
     for n in data2:
         # set_data=[]
         # for i in n:
-            temp=[n.time,n.data]
+            temp=[n.update_time,n.val]
             # set_data.append(temp)
             data5.append(temp)
     # print("data55555555555",data5)
@@ -48,7 +57,8 @@ def y_data_ts_1(request):
         # for i in n:
            
             date_initial=n[0]
-            pattern = '%Y-%m-%d %H:%M:%S'
+            pattern = '%Y-%m-%d %H:%M:%S.%f'
+            ###### To covert time in milliseconds
             epoch = int(time.mktime(time.strptime(date_initial, pattern)))
             # print("iiiiiiiiii",n[0])
             n[0] = epoch*1000   
