@@ -66,7 +66,7 @@ def y_data_ts_1(request,duration):
               n[1] = float(n[1])       
     # print("fina_data",data5)
     return Response(data5)
-
+@api_view(['POST'])
 def y_data_1(request):
     print("function y_data_1 is running")
     chart = request.data["chart"]
