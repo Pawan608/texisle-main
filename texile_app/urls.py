@@ -12,7 +12,7 @@ urlpatterns = [
     # path('data_pull/', views.data_pull, name="data_pull"),
     path('y_data_pull/', views.y_data_pull, name="y_data_pull"),
     path('y_ts_hourly_pull/',views.y_ts_hourly_pull),
-    path('y_data_ts_1/<int:duration>', views.y_data_ts_1, name="y_data_ts_1"),
+    path('y_data_ts_1/<int:duration>/<str:country>', views.y_data_ts_1, name="y_data_ts_1"),
     path('y_data_1/', views.y_data_1, name="y_data_1"),
     path('y_data_2/', views.y_data_2, name="y_data_2"),
     path('y_data_3/', views.y_data_3, name="y_data_3"),

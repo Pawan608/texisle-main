@@ -7,16 +7,20 @@ from rest_framework.decorators import api_view, schema, permission_classes
 import json
 from django.core import serializers
 import time, os
-from datetime import datetime
+import datetime
 import requests
 from django.db.models import Count
 import time
 from datetime import date
 import math
+from calendar import monthrange
+from django.db.models import Q
 # Chart data
 @api_view(['POST'])
-def y_data_ts_1(request,duration):
+def y_data_ts_1(request,duration,country):
     print("function y_data_ts_1 is running",duration)
+    chart = request.data["chart"]
+    print("couuntryyy",country)
     #####Duration is the interval in minute within which the user wants the periodic data
     ### As data is coming for every 5 minutes therefore user should give a duration of 5 or above, 
     ###### in case duration is below 5 then it will automatically be conerted to 5
@@ -29,10 +33,62 @@ def y_data_ts_1(request,duration):
     interval=math.trunc(duration/5)
     seven_day=[]
     today = date.today()
-    date_7_days_ago=datetime(today.year, today.month, today.day-7, 9,0 ,0)
-    data1=hourly_yahoo_data.objects.filter(update_time__gte=date_7_days_ago,chart='TS')
-    data2=[data1[0]]
-    #### To fetch data of the specified interval we are running a simple for loop 
+    day=today.day
+    month=today.month
+    year=today.year
+    final_day=today.day
+    if(day<=7):
+        month=month-1
+        num_days = monthrange(year, month)[1]
+        days_extra=7-day
+        final_day=num_days-days_extra
+    else:
+        final_day=day-7
+    if(month>12):
+        month=1
+        year=year+1
+    date_7_days_ago=datetime.datetime(year, month,final_day , 9,0 ,0)
+    dataAnonymous=[]
+    queySet=[]
+    dataUTC=[]
+    data1=[]
+    data2=[]
+    for i in range (0,7):
+        print(i)
+        # if(country=='America'):
+        #     minTime=date_7_days_ago=datetime.datetime(year, month,final_day+i , 14,30 ,0)
+        #     maxTime=date_7_days_ago=datetime.datetime(year, month,final_day+i, 21,0 ,0)
+        #     data123=hourly_yahoo_data.objects.filter(Q(update_time__gte=minTime)&Q(update_time__lte=maxTime)&Q(chart = chart))
+        #     dataUTC.extend(data123)
+        if(country=='America'):
+            minTime=date_7_days_ago=datetime.datetime(year, month,final_day+i , 14,30 ,0)
+            maxTime=date_7_days_ago=datetime.datetime(year, month,final_day+i, 21,0 ,0)
+            data123=hourly_yahoo_data.objects.filter(Q(update_time__gte=minTime)&Q(update_time__lte=maxTime)&Q(chart = chart))
+            print("heeey")
+            dataUTC.extend(data123)
+        if(country=='Japan'):
+            minTime=date_7_days_ago=datetime.datetime(year, month,final_day+i , 0,0 ,0)
+            maxTime=date_7_days_ago=datetime.datetime(year, month,final_day+i, 6,0 ,0)
+            data12=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
+            dataUTC.extend(data12)
+        if(country=='Paris'):
+            minTime=date_7_days_ago=datetime.datetime(year, month,final_day+i , 8,0 ,0)
+            maxTime=date_7_days_ago=datetime.datetime(year, month,final_day+i, 16,30 ,0)
+            dataParis=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
+            dataUTC.extend(dataParis)
+
+    if(country!='Paris'and country!='America'and country!='Japan'):
+      dataAnonymous=hourly_yahoo_data.objects.filter(update_time__gte=date_7_days_ago,chart = chart )
+    print("hhhey",(dataUTC))
+    if(len(dataUTC)):
+     data1=dataUTC
+    elif(len(dataAnonymous)):
+        data1=dataAnonymous
+  
+     
+    # print(data2)
+
+    # #### To fetch data of the specified interval we are running a simple for loop 
     for i in range(1,len(data1)-1):
         if(i!=0):
             if((i+1)%interval==0):
@@ -47,7 +103,7 @@ def y_data_ts_1(request,duration):
             # set_data.append(temp)
             data5.append(temp)
     # print("data55555555555",data5)
-    
+
     final_date=[]
     data_final=[]
     
@@ -81,7 +137,7 @@ def y_data_1(request):
         i[0] = i[0].replace("/","-")
         date.append(i[0])
 
-    date.sort(key = lambda date: datetime.strptime(date, '%m-%d-%Y'))
+    date.sort(key = lambda date: datetime.datetime.strptime(date, '%m-%d-%Y'))
     # print(date)
     final_data = []
     for i in date:
@@ -118,7 +174,7 @@ def y_data_2(request):
         i[0] = i[0].replace("/","-")
         date.append(i[0])
 
-    date.sort(key = lambda date: datetime.strptime(date, '%m-%d-%Y'))
+    date.sort(key = lambda date: datetime.datetime.strptime(date, '%m-%d-%Y'))
     # print(date)
     final_data = []
     for i in date:
@@ -154,7 +210,7 @@ def y_data_3(request):
         i[0] = i[0].replace("/","-")
         date.append(i[0])
 
-    date.sort(key = lambda date: datetime.strptime(date, '%m-%d-%Y'))
+    date.sort(key = lambda date: datetime.datetime.strptime(date, '%m-%d-%Y'))
     # print(date)
     final_data = []
     for i in date:
@@ -190,7 +246,7 @@ def y_data_4(request):
         i[0] = i[0].replace("/","-")
         date.append(i[0])
 
-    date.sort(key = lambda date: datetime.strptime(date, '%m-%d-%Y'))
+    date.sort(key = lambda date: datetime.datetime.strptime(date, '%m-%d-%Y'))
     # print(date)
     final_data = []
     for i in date:
@@ -226,7 +282,7 @@ def y_data_5(request):
         i[0] = i[0].replace("/","-")
         date.append(i[0])
 
-    date.sort(key = lambda date: datetime.strptime(date, '%m-%d-%Y'))
+    date.sort(key = lambda date: datetime.datetime.strptime(date, '%m-%d-%Y'))
     # print(date)
     final_data = []
     for i in date:
@@ -262,7 +318,7 @@ def y_data_6(request):
         i[0] = i[0].replace("/","-")
         date.append(i[0])
 
-    date.sort(key = lambda date: datetime.strptime(date, '%m-%d-%Y'))
+    date.sort(key = lambda date: datetime.datetime.strptime(date, '%m-%d-%Y'))
     # print(date)
     final_data = []
     for i in date:
