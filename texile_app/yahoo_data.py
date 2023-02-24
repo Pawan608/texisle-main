@@ -53,37 +53,42 @@ def y_data_ts_1(request,duration,country):
     dataUTC=[]
     data1=[]
     data2=[]
+    weekdays=[]
     for i in range (0,7):
         print(i)
-        # if(country=='America'):
-        #     minTime=date_7_days_ago=datetime.datetime(year, month,final_day+i , 14,30 ,0)
-        #     maxTime=date_7_days_ago=datetime.datetime(year, month,final_day+i, 21,0 ,0)
-        #     data123=hourly_yahoo_data.objects.filter(Q(update_time__gte=minTime)&Q(update_time__lte=maxTime)&Q(chart = chart))
-        #     dataUTC.extend(data123)
         if(country=='America'):
-            minTime=date_7_days_ago=datetime.datetime(year, month,final_day+i , 14,30 ,0)
-            maxTime=date_7_days_ago=datetime.datetime(year, month,final_day+i, 21,0 ,0)
+            minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0)
+            maxTime=datetime.datetime(year, month,final_day+i, 21,0 ,0)
             data123=hourly_yahoo_data.objects.filter(Q(update_time__gte=minTime)&Q(update_time__lte=maxTime)&Q(chart = chart))
-            print("heeey")
             dataUTC.extend(data123)
+            if(len(data123)):
+                weekdays.append(data123[0].update_time)
         if(country=='Japan'):
-            minTime=date_7_days_ago=datetime.datetime(year, month,final_day+i , 0,0 ,0)
-            maxTime=date_7_days_ago=datetime.datetime(year, month,final_day+i, 6,0 ,0)
+            minTime=datetime.datetime(year, month,final_day+i , 0,0 ,0)
+            maxTime=datetime.datetime(year, month,final_day+i, 6,0 ,0)
             data12=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
             dataUTC.extend(data12)
+            if(len(data12)):
+                weekdays.append(data12[0].update_time)
         if(country=='Paris'):
-            minTime=date_7_days_ago=datetime.datetime(year, month,final_day+i , 8,0 ,0)
-            maxTime=date_7_days_ago=datetime.datetime(year, month,final_day+i, 16,30 ,0)
+            minTime=datetime.datetime(year, month,final_day+i , 8,0 ,0)
+            maxTime=datetime.datetime(year, month,final_day+i, 16,30 ,0)
             dataParis=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
             dataUTC.extend(dataParis)
-
-    if(country!='Paris'and country!='America'and country!='Japan'):
-      dataAnonymous=hourly_yahoo_data.objects.filter(update_time__gte=date_7_days_ago,chart = chart )
-    print("hhhey",(dataUTC))
+            if(len(dataParis)):
+                weekdays.append(dataParis[0].update_time)
+        if(country!='Paris'and country!='America'and country!='Japan'):
+            print(year,month,final_day)
+            minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0)
+            maxTime=datetime.datetime(year, month,final_day+i,21,0 ,0)
+            dataAnonymous=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart )
+            if(len(dataAnonymous)):
+                weekdays.append(dataAnonymous[0].update_time)
+            dataUTC.extend(dataAnonymous)
     if(len(dataUTC)):
      data1=dataUTC
-    elif(len(dataAnonymous)):
-        data1=dataAnonymous
+    # elif(len(dataAnonymous)):
+    #     data1=dataAnonymous
   
      
     # print(data2)
@@ -121,7 +126,11 @@ def y_data_ts_1(request,duration,country):
             if n[1]!=None:
               n[1] = float(n[1])       
     # print("fina_data",data5)
-    return Response(data5)
+    response=[
+        data5,
+        weekdays
+    ]
+    return Response(response)
 @api_view(['POST'])
 def y_data_1(request):
     print("function y_data_1 is running")

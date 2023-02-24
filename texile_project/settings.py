@@ -38,6 +38,7 @@ ALLOWED_HOSTS = ["0.0.0.0","127.0.0.1","192.241.197.190","198.199.111.31","167.9
 # Application definition
 
 INSTALLED_APPS = [
+    'channels', 
     'texile_app.apps.TexileAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'after_response',
     "whitenoise.runserver_nostatic"
 ]
+ASGI_APPLICATION='mywebsite.asgi.app'
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
