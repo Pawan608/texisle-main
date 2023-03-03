@@ -38,8 +38,8 @@ def y_data_ts_1(request,duration,country):
     year=today.year
     final_day=today.day
     if(day<=7):
-        month=month-1
-        num_days = monthrange(year, month)[1]
+        num_days = monthrange(year, month-1)[1]
+        print("number od days",num_days)
         days_extra=7-day
         final_day=num_days-days_extra
     else:
@@ -56,35 +56,54 @@ def y_data_ts_1(request,duration,country):
     weekdays=[]
     for i in range (0,7):
         print(i)
-        if(country=='America'):
-            minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0)
-            maxTime=datetime.datetime(year, month,final_day+i, 21,0 ,0)
+        if(country=='Paris'or country=='America'or country=='Japan'):
+            if(day<=7 and days_extra>=i ):
+                minTime=datetime.datetime(year, month-1,final_day+i , 14,30 ,0)
+                maxTime=datetime.datetime(year, month-1,final_day+i, 21,0 ,0)
+                print("maxtime",maxTime,minTime,final_day)
+            elif(day<=7 and days_extra<i ):
+                  minTime=datetime.datetime(year, month,i-days_extra , 14,30 ,0)
+                  maxTime=datetime.datetime(year, month,i-days_extra, 21,0 ,0)
+                  print("maxtime",maxTime,minTime,final_day)
+            else:
+                 minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0)
+                 maxTime=datetime.datetime(year, month,final_day+i, 21,0 ,0)
             data123=hourly_yahoo_data.objects.filter(Q(update_time__gte=minTime)&Q(update_time__lte=maxTime)&Q(chart = chart))
+            print("daata123",data123)
             dataUTC.extend(data123)
             if(len(data123)):
                 weekdays.append(data123[0].update_time)
-        if(country=='Japan'):
-            minTime=datetime.datetime(year, month,final_day+i , 0,0 ,0)
-            maxTime=datetime.datetime(year, month,final_day+i, 6,0 ,0)
-            data12=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
-            dataUTC.extend(data12)
-            if(len(data12)):
-                weekdays.append(data12[0].update_time)
-        if(country=='Paris'):
-            minTime=datetime.datetime(year, month,final_day+i , 8,0 ,0)
-            maxTime=datetime.datetime(year, month,final_day+i, 16,30 ,0)
-            dataParis=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
-            dataUTC.extend(dataParis)
-            if(len(dataParis)):
-                weekdays.append(dataParis[0].update_time)
+        # if(country=='Japan'):
+        #     minTime=datetime.datetime(year, month,final_day+i , 0,0 ,0)
+        #     maxTime=datetime.datetime(year, month,final_day+i, 6,0 ,0)
+        #     data12=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
+        #     dataUTC.extend(data12)
+        #     if(len(data12)):
+        #         weekdays.append(data12[0].update_time)
+        # if(country=='Paris'):
+        #     minTime=datetime.datetime(year, month,final_day+i , 8,0 ,0)
+        #     maxTime=datetime.datetime(year, month,final_day+i, 16,30 ,0)
+        #     dataParis=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
+        #     dataUTC.extend(dataParis)
+        #     if(len(dataParis)):
+        #         weekdays.append(dataParis[0].update_time)
         if(country!='Paris'and country!='America'and country!='Japan'):
-            print(year,month,final_day)
-            minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0)
-            maxTime=datetime.datetime(year, month,final_day+i,21,0 ,0)
-            dataAnonymous=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart )
-            if(len(dataAnonymous)):
+            # print(year,month,final_day)
+           if(day<=7 and days_extra>=i ):
+                minTime=datetime.datetime(year, month-1,final_day+i , 14,30 ,0)
+                maxTime=datetime.datetime(year, month-1,final_day+i, 21,0 ,0)
+                print("maxtime",maxTime,minTime,final_day)
+           elif(day<=7 and days_extra<i ):
+                  minTime=datetime.datetime(year, month,i-days_extra , 14,30 ,0)
+                  maxTime=datetime.datetime(year, month,i-days_extra, 21,0 ,0)
+                  print("maxtime",maxTime,minTime,final_day)
+           else:
+                 minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0)
+                 maxTime=datetime.datetime(year, month,final_day+i, 21,0 ,0)
+           dataAnonymous=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart )
+           if(len(dataAnonymous)):
                 weekdays.append(dataAnonymous[0].update_time)
-            dataUTC.extend(dataAnonymous)
+           dataUTC.extend(dataAnonymous)
     if(len(dataUTC)):
      data1=dataUTC
     # elif(len(dataAnonymous)):
