@@ -105,4 +105,10 @@ urlpatterns = [
     path('get_config/', views.get_config, name="get_config"),
     path('get_emailID/', views.get_emailID, name="get_emailID"),
     path('add_emailID/', views.add_emailID, name="add_emailID"),
+
+
+    #5 min data
+    path('pull_data_us/',views.pull_data_us,name="pull_data_us"),
+    path('pull_data_eur/',views.pull_data_eur,name="pull_data_eur"),
+    path('pull_data_jpy/',views.pull_data_jpy,name="pull_data_jpy"),
 ]

@@ -37,6 +37,30 @@ def pull_latest_data(request):
 
     return Response({"status":200})
 
+@api_view(['GET'])
+def pull_data_us(request):
+    chart_list = ["RIO","VALE","MT","PKX","NUE","TS","STLD","RS","CLF","TX","GGB","X","CMC","SXC","TMST","BHP","NWPX"]
+    for each in chart_list:
+        y_finance_input(each)
+
+    return Response({"status":200})
+
+@api_view(['GET'])
+def pull_data_eur(response):
+    eur = convert(base='EUR', amount=1, to=['USD'])['USD'] 
+    chart_list_EUR = ["VK.PA","TKA.DE","SZG.DE"]
+    for each in chart_list_EUR:
+        y_finance_input_EUR(each, eur)
+    return Response({"status":200})
+
+@api_view(['GET'])
+def pull_data_jpy(response):
+    jpy = convert(base='JPY', amount=1, to=['USD'])['USD'] 
+    chart_list_JPY = ["5411.T","5401.T"]
+    for each in chart_list_JPY:
+        y_finance_input_JPY(each, jpy)
+    return Response({"status":200})
+
 #function for pulling data from the yahoo finance website
 def y_finance_input(comp):
     try:
