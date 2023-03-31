@@ -15,13 +15,12 @@ from datetime import date
 import math
 from calendar import monthrange
 from django.db.models import Q
-from datetime import timezone
 # Chart data
 @api_view(['POST'])
 def y_data_ts_1(request,duration,country):
     print("function y_data_ts_1 is running",duration)
     chart = request.data["chart"]
-    # print("couuntryyy",country)
+    print("couuntryyy",country)
     #####Duration is the interval in minute within which the user wants the periodic data
     ### As data is coming for every 5 minutes therefore user should give a duration of 5 or above, 
     ###### in case duration is below 5 then it will automatically be conerted to 5
@@ -40,7 +39,7 @@ def y_data_ts_1(request,duration,country):
     final_day=today.day
     if(day<=7):
         num_days = monthrange(year, month-1)[1]
-        # print("number od days",num_days)
+        #print("number od days",num_days)
         days_extra=7-day
         final_day=num_days-days_extra
     else:
@@ -56,58 +55,25 @@ def y_data_ts_1(request,duration,country):
     data2=[]
     weekdays=[]
     for i in range (0,7):
-        # print(i)
+        #print(i)
+        #print(country,"Hiiiiiiiiiiiiiiiiiiii")
         if(country=='Paris'or country=='America'or country=='Japan' or country=='x'):
             if(day<=7 and days_extra>=i ):
-                minTime=datetime.datetime(year, month-1,final_day+i , 14,30 ,0,tzinfo=timezone.utc)
-                maxTime=datetime.datetime(year, month-1,final_day+i, 21,0 ,0,tzinfo=timezone.utc)
-                # print("maxtime",maxTime,minTime,final_day)
+                minTime=datetime.datetime(year, month-1,final_day+i , 14,30 ,0)
+                maxTime=datetime.datetime(year, month-1,final_day+i, 21,0 ,0)
+                #print("maxtime",maxTime,minTime,final_day)
             elif(day<=7 and days_extra<i ):
-                  minTime=datetime.datetime(year, month,i-days_extra , 14,30 ,0,tzinfo=timezone.utc)
-                 
-                  maxTime=datetime.datetime(year, month,i-days_extra, 21,0 ,0,tzinfo=timezone.utc)
-                #   print("maxtime",maxTime,minTime,final_day)
+                  minTime=datetime.datetime(year, month,i-days_extra , 14,30 ,0)
+                  maxTime=datetime.datetime(year, month,i-days_extra, 21,0 ,0)
+                 #print("maxtime",maxTime,minTime,final_day)
             else:
-                 minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0,tzinfo=timezone.utc)
-                 maxTime=datetime.datetime(year, month,final_day+i, 21,0 ,0,tzinfo=timezone.utc)
+                 minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0)
+                 maxTime=datetime.datetime(year, month,final_day+i, 21,0 ,0)
             data123=hourly_yahoo_data.objects.filter(Q(update_time__gte=minTime)&Q(update_time__lte=maxTime)&Q(chart = chart))
-            # print("daata123",data123)
+            #print("daata123",data123)
             dataUTC.extend(data123)
             if(len(data123)):
                 weekdays.append(data123[0].update_time)
-        # if(country=='Japan'):
-        #     minTime=datetime.datetime(year, month,final_day+i , 0,0 ,0)
-        #     maxTime=datetime.datetime(year, month,final_day+i, 6,0 ,0)
-        #     data12=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
-        #     dataUTC.extend(data12)
-        #     if(len(data12)):
-        #         weekdays.append(data12[0].update_time)
-        # if(country=='Paris'):
-        #     minTime=datetime.datetime(year, month,final_day+i , 8,0 ,0)
-        #     maxTime=datetime.datetime(year, month,final_day+i, 16,30 ,0)
-        #     dataParis=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart)
-        #     dataUTC.extend(dataParis)
-        #     if(len(dataParis)):
-        #         weekdays.append(dataParis[0].update_time)
-
-
-        # if(country!='Paris'and country!='America'and country!='Japan'):
-        #     # print(year,month,final_day)
-        #    if(day<=7 and days_extra>=i ):
-        #         minTime=datetime.datetime(year, month-1,final_day+i , 14,30 ,0)
-        #         maxTime=datetime.datetime(year, month-1,final_day+i, 21,0 ,0)
-        #         print("maxtime",maxTime,minTime,final_day)
-        #    elif(day<=7 and days_extra<i ):
-        #           minTime=datetime.datetime(year, month,i-days_extra , 14,30 ,0)
-        #           maxTime=datetime.datetime(year, month,i-days_extra, 21,0 ,0)
-        #           print("maxtime",maxTime,minTime,final_day)
-        #    else:
-        #          minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0)
-        #          maxTime=datetime.datetime(year, month,final_day+i, 21,0 ,0)
-        #    dataAnonymous=hourly_yahoo_data.objects.filter(update_time__gte=minTime,update_time__lte=maxTime,chart = chart )
-        #    if(len(dataAnonymous)):
-        #         weekdays.append(dataAnonymous[0].update_time)
-        #    dataUTC.extend(dataAnonymous)
     if(len(dataUTC)):
      data1=dataUTC
     # elif(len(dataAnonymous)):
@@ -140,15 +106,12 @@ def y_data_ts_1(request,duration,country):
     for n in data5:
         # for i in n:
            
-            date_initial=n[0]+" "+'UTC'
-            # pattern = '%Y-%m-%d %H:%M:%S.%f %Z'
-            # print(date_initial)
-            # ###### To covert time in milliseconds
-            # epoch = int(time.mktime(time.strptime(date_initial, pattern)))
-            # # print("iiiiiiiiii",n[0])
-            # n[0] = epoch*1000   
-            # print(n[0])
-            n[0]=date_initial
+            date_initial=n[0]
+            pattern = '%Y-%m-%d %H:%M:%S.%f'
+            ###### To covert time in milliseconds
+            epoch = int(time.mktime(time.strptime(date_initial, pattern)))
+            # print("iiiiiiiiii",n[0])
+            n[0] = epoch*1000   
             if n[1]!=None:
               n[1] = float(n[1])       
     # print("fina_data",data5)
@@ -159,7 +122,7 @@ def y_data_ts_1(request,duration,country):
     return Response(response)
 @api_view(['POST'])
 def y_data_1(request):
-    print("function y_data_1 is running")
+    #print("function y_data_1 is running")
     chart = request.data["chart"]
     yahoo_obj = yahoo_data.objects.all().filter(chart = chart , chart_type = "1week")
     data = []
@@ -199,7 +162,6 @@ def y_data_1(request):
 def y_data_2(request):
     chart = request.data["chart"]
     yahoo_obj = yahoo_data.objects.all().filter(chart = chart , chart_type = "1month")
-    print("111111 month",yahoo_obj,"HHEY")
     data = []
     for n in yahoo_obj:
         temp= [n.date, n.data]

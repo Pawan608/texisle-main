@@ -17,7 +17,7 @@ from datetime import datetime, timedelta, date
 from django.utils import timezone
 from .smtp_server import feedback_mail
 import after_response
-
+# from models import customMessage
 @api_view(['POST'])
 def message(request):
     title= request.data["title"]
@@ -27,4 +27,22 @@ def message(request):
         msg = each.message
     print(msg)
     return Response({'message': msg})
+@api_view(['POST'])
+def createMessage(request):
+    title=request.data["title"]
+    app=request.data["app"]
+    message=request.data["message"]
+    custommessage =customMessage(app=app ,title=title ,message=message)
+    custommessage.save()
+    # print(title,app,message)
+    return Response({message})
+@api_view(['GET'])
+def getMessage(request):
+    custommessage=customMessage.objects.all()
+    list=[]
+    for i in range (0,len(custommessage)):
+        list.append([custommessage[i].title,custommessage[i].message])
+    # print(list)
+    return Response(list)
+
 

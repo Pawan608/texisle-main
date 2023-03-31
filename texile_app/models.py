@@ -315,7 +315,7 @@ class feedback(models.Model):
 class customMessage(models.Model):
     app = models.CharField(max_length = 10)
     title = models.CharField(max_length = 100)
-    message = models.CharField(max_length=10000, default="")
+    message = models.CharField(max_length=100000, default="")
     # def __str__(self):
     #     return f"{self.title}+{self.message}"
 class y_data_ts(models.Model):

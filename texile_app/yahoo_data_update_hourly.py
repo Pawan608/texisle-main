@@ -61,6 +61,7 @@ def pull_data_jpy(response):
         y_finance_input_JPY(each, jpy)
     return Response({"status":200})
 
+
 #function for pulling data from the yahoo finance website
 def y_finance_input(comp):
     try:

@@ -5,15 +5,19 @@ urlpatterns = [
     path('rmi_chart_data/', views.rmi_chart_data, name="rmi_chart_data"),
     path('rmi_cme_data_push/', views.rmi_cme_data_push, name="rmi_cme_data_push"),
     path('rmi_index_cme/', views.rmi_index_cme, name="rmi_index_cme"),
-
+    
     path('news_data_updated/', views.news_data_updated, name="news_data_updated"),
     path('default_news_data/', views.default_news_data, name="default_news_data"),
     path('news_data_index/', views.news_data_index, name="news_data_index"),
-    # path('data_pull/', views.data_pull, name="data_pull"),
+    #path('data_pull/', views.data_pull, name="data_pull"),
     path('y_data_pull/', views.y_data_pull, name="y_data_pull"),
     path('y_ts_hourly_pull/',views.y_ts_hourly_pull),
     path('y_data_ts_1/<int:duration>/<str:country>', views.y_data_ts_1, name="y_data_ts_1"),
+    path('createMessage/', views.createMessage, name="createMessage"),
+    path('getMessage/', views.getMessage, name="getMessage"),
+
     path('y_data_1/', views.y_data_1, name="y_data_1"),
+
     path('y_data_2/', views.y_data_2, name="y_data_2"),
     path('y_data_3/', views.y_data_3, name="y_data_3"),
     path('y_data_4/', views.y_data_4, name="y_data_4"),
@@ -72,7 +76,7 @@ urlpatterns = [
     path('feedback_data/', views.feedback_data, name="feedback_data"),
     path('check_feedback/', views.check_feedback, name="check_feedback"),
     path('message/', views.message, name="message"),
-    
+ 
     path('news_remove_parameter/', views.news_remove_parameter, name="news_remove_parameter"),
 
     path('rec_news_lp/', views.rec_news_lp, name="rec_news_lp"),
