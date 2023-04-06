@@ -20,7 +20,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
-
+from django.db.models import Q
 # api to download data on website
 @api_view(['POST'])
 def web_data(request):
@@ -223,8 +223,9 @@ def add_emailID(request):
 
 
 def send_csv_mail(df, email, chart_list, start_date, end_date):
-    custom_message=customMessage.objects.all().filter(app='dev')
+    custom_message=customMessage.objects.all().filter(Q(title__iexact='references')|Q(title__iexact='frequency of update'))
     mail_body=""
+    print(custom_message)
     for each in custom_message:
         if(each.title!='about'):
             mail_body=mail_body+'<p><h3 style="color:red">'+each.title.capitalize()+ '</h3></p>'+'<h5>'+each.message+ '</h5>'

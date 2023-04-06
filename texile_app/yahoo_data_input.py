@@ -21,7 +21,7 @@ from py_currency_converter import convert
 @csrf_exempt
 @api_view(['GET'])
 def y_data_pull(request):
-    chart_list = ["RIO","VALE","MT","PKX","NUE","TS","STLD","RS","CLF","TX","GGB","X","CMC","SXC","TMST","BHP","NWPX","HO=F","RB=F"]
+    chart_list = ["RS","RIO","VALE","MT","PKX","NUE","TS","STLD","CLF","TX","GGB","X","CMC","SXC","TMST","BHP","NWPX","HO=F","RB=F"]
     chart_list_EUR = ["VK.PA","TKA.DE","SZG.DE"]
     chart_list_JPY = ["5411.T","5401.T"]
 
