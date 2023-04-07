@@ -37,13 +37,13 @@ def y_data_ts_1(request,duration,country):
     month=today.month
     year=today.year
     final_day=today.day
-    if(day<=7):
+    if(day<7):
         num_days = monthrange(year, month-1)[1]
         #print("number od days",num_days)
         days_extra=7-day
         final_day=num_days-days_extra
     else:
-        final_day=day-7
+        final_day=day-7 or 1
     if(month>12):
         month=1
         year=year+1
@@ -58,11 +58,11 @@ def y_data_ts_1(request,duration,country):
         #print(i)
         #print(country,"Hiiiiiiiiiiiiiiiiiiii")
         if(country=='Paris'or country=='America'or country=='Japan' or country=='x'):
-            if(day<=7 and days_extra>=i ):
+            if(day<7 and days_extra>=i ):
                 minTime=datetime.datetime(year, month-1,final_day+i , 14,30 ,0)
                 maxTime=datetime.datetime(year, month-1,final_day+i, 21,0 ,0)
                 #print("maxtime",maxTime,minTime,final_day)
-            elif(day<=7 and days_extra<i ):
+            elif(day<7 and days_extra<i ):
                   minTime=datetime.datetime(year, month,i-days_extra , 14,30 ,0)
                   maxTime=datetime.datetime(year, month,i-days_extra, 21,0 ,0)
                  #print("maxtime",maxTime,minTime,final_day)
