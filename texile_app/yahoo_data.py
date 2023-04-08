@@ -59,16 +59,16 @@ def y_data_ts_1(request,duration,country):
         #print(country,"Hiiiiiiiiiiiiiiiiiiii")
         if(country=='Paris'or country=='America'or country=='Japan' or country=='x'):
             if(day<7 and days_extra>=i ):
-                minTime=datetime.datetime(year, month-1,final_day+i , 14,30 ,0)
-                maxTime=datetime.datetime(year, month-1,final_day+i, 21,0 ,0)
+                minTime=datetime.datetime(year, month-1,final_day+i , 14,0 ,0)
+                maxTime=datetime.datetime(year, month-1,final_day+i, 20,0 ,0)
                 #print("maxtime",maxTime,minTime,final_day)
             elif(day<7 and days_extra<i ):
-                  minTime=datetime.datetime(year, month,i-days_extra , 14,30 ,0)
-                  maxTime=datetime.datetime(year, month,i-days_extra, 21,0 ,0)
+                  minTime=datetime.datetime(year, month,i-days_extra , 14,0 ,0)
+                  maxTime=datetime.datetime(year, month,i-days_extra, 20,0 ,0)
                  #print("maxtime",maxTime,minTime,final_day)
             else:
-                 minTime=datetime.datetime(year, month,final_day+i , 14,30 ,0)
-                 maxTime=datetime.datetime(year, month,final_day+i, 21,0 ,0)
+                 minTime=datetime.datetime(year, month,final_day+i , 14,0 ,0)
+                 maxTime=datetime.datetime(year, month,final_day+i, 20,0 ,0)
             data123=hourly_yahoo_data.objects.filter(Q(update_time__gte=minTime)&Q(update_time__lte=maxTime)&Q(chart = chart))
             #print("daata123",data123)
             dataUTC.extend(data123)
