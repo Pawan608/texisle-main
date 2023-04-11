@@ -47,28 +47,43 @@ def y_data_ts_1(request,duration,country):
     if(month>12):
         month=1
         year=year+1
-    date_7_days_ago=datetime.datetime(year, month,final_day , 9,0 ,0)
+    # date_7_days_ago=datetime.datetime(year, month,final_day , 9,0 ,0)
     dataAnonymous=[]
     queySet=[]
     dataUTC=[]
     data1=[]
     data2=[]
     weekdays=[]
+    lowerRange=14
+    upperRange=20
+    # print("chaart",chart)
+    if(chart=='vk.pa' or chart=='tka.de' or chart=='szg.de'):
+        # print("chaaaaart",chart,lowerRange,upperRange)
+        # global lowerRange,upperRange
+        lowerRange=7
+        upperRange=15
+        # print("chaaaaart",chart,lowerRange,upperRange)
+    if(chart=='5401.T' or chart=='5411.T'):
+        lowerRange=0
+        upperRange=7
+
+    print("lowerRange",lowerRange,upperRange)
     for i in range (0,7):
         #print(i)
         #print(country,"Hiiiiiiiiiiiiiiiiiiii")
         if(country=='Paris'or country=='America'or country=='Japan' or country=='x'):
             if(day<7 and days_extra>=i ):
-                minTime=datetime.datetime(year, month-1,final_day+i , 14,0 ,0)
-                maxTime=datetime.datetime(year, month-1,final_day+i, 20,0 ,0)
+                minTime=datetime.datetime(year, month-1,final_day+i , lowerRange,0 ,0)
+                maxTime=datetime.datetime(year, month-1,final_day+i, upperRange,0 ,0)
                 #print("maxtime",maxTime,minTime,final_day)
             elif(day<7 and days_extra<i ):
-                  minTime=datetime.datetime(year, month,i-days_extra , 14,0 ,0)
-                  maxTime=datetime.datetime(year, month,i-days_extra, 20,0 ,0)
+                  minTime=datetime.datetime(year, month,i-days_extra , lowerRange,0 ,0)
+                  maxTime=datetime.datetime(year, month,i-days_extra, upperRange,0 ,0)
                  #print("maxtime",maxTime,minTime,final_day)
             else:
-                 minTime=datetime.datetime(year, month,final_day+i , 14,0 ,0)
-                 maxTime=datetime.datetime(year, month,final_day+i, 20,0 ,0)
+                 minTime=datetime.datetime(year, month,final_day+i , lowerRange,0 ,0)
+                 maxTime=datetime.datetime(year, month,final_day+i, upperRange,0 ,0)
+            print(minTime,maxTime)
             data123=hourly_yahoo_data.objects.filter(Q(update_time__gte=minTime)&Q(update_time__lte=maxTime)&Q(chart = chart))
             #print("daata123",data123)
             dataUTC.extend(data123)
@@ -89,37 +104,42 @@ def y_data_ts_1(request,duration,country):
                 data2.append(data1[i])
     # print(len(data2),data2[0])
     #######################Uncomment##################
-    data5=[]
+    data5z=[]
     for n in data2:
-        # set_data=[]
+            set_data=[]
         # for i in n:
-            temp=[n.update_time,n.val]
-            # set_data.append(temp)
-            data5.append(temp)
+            temp1=[n.update_time,float(n.val)]
+            set_data.append(temp1)
+            data5z.append(temp1)
+    # print("hhhey",data5z)
+    data1220=[]
+    data1220.extend (data5z)
+    return Response([weekdays,data1220])
     # print("data55555555555",data5)
-
+    data11222=data5z
     final_date=[]
     data_final=[]
-    
+    # print(data5)
     # print('dataa',data5)
 
-    for n in data5:
-        # for i in n:
+    # for n in data5:
+    #     # for i in n:
            
-            date_initial=n[0]
-            pattern = '%Y-%m-%d %H:%M:%S.%f'
-            ###### To covert time in milliseconds
-            epoch = int(time.mktime(time.strptime(date_initial, pattern)))
-            # print("iiiiiiiiii",n[0])
-            n[0] = epoch*1000   
-            if n[1]!=None:
-              n[1] = float(n[1])       
+    #         date_initial=n[0]
+    #         pattern = '%Y-%m-%d %H:%M:%S.%f'
+    #         ###### To covert time in milliseconds
+    #         epoch = int(time.mktime(time.strptime(date_initial, pattern)))
+    #         # print("iiiiiiiiii",n[0])
+    #         n[0] = epoch*1000   
+    #         if n[1]!=None:
+    #           n[1] = float(n[1])       
     # print("fina_data",data5)
-    response=[
-        data5,
-        weekdays
-    ]
-    return Response(response)
+    # responsez=[
+    #     data5z,
+    #     weekdays
+    # ]
+    # print(responsez)
+    
 @api_view(['POST'])
 def y_data_1(request):
     #print("function y_data_1 is running")
