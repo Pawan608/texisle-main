@@ -61,7 +61,7 @@ def y_data_ts_1(request,duration,country):
         # print("chaaaaart",chart,lowerRange,upperRange)
         # global lowerRange,upperRange
         lowerRange=7
-        upperRange=15
+        upperRange=16
         # print("chaaaaart",chart,lowerRange,upperRange)
     if(chart=='5401.T' or chart=='5411.T'):
         lowerRange=0
@@ -74,7 +74,7 @@ def y_data_ts_1(request,duration,country):
         if(country=='Paris'or country=='America'or country=='Japan' or country=='x'):
             if(day<7 and days_extra>=i ):
                 minTime=datetime.datetime(year, month-1,final_day+i , lowerRange,0 ,0)
-                maxTime=datetime.datetime(year, month-1,final_day+i, upperRange,0 ,0)
+                maxTime=datetime.datetime(year, month-1,final_day+i, upperRange,5 ,0)
                 #print("maxtime",maxTime,minTime,final_day)
             elif(day<7 and days_extra<i ):
                   minTime=datetime.datetime(year, month,i-days_extra , lowerRange,0 ,0)
