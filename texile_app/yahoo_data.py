@@ -68,6 +68,11 @@ def y_data_ts_1(request,duration,country):
         upperRange=7
 
     print("lowerRange",lowerRange,upperRange)
+    # #################To delete data for a a particualar Daya#############
+    # minDEL=datetime.datetime(year, 4,7)
+    # maxDel=datetime.datetime(year, 4,8)
+    # dataDel=hourly_yahoo_data.objects.filter(Q(update_time__gte=minDEL)&Q(update_time__lte=maxDel)&Q(chart = chart)).delete()
+    # #################################################################################
     for i in range (0,7):
         #print(i)
         #print(country,"Hiiiiiiiiiiiiiiiiiiii")
