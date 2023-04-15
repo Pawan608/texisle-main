@@ -88,14 +88,16 @@ def y_data_ts_1(request,duration,country):
             else:
                  minTime=datetime.datetime(year, month,final_day+i , lowerRange,0 ,0)
                  maxTime=datetime.datetime(year, month,final_day+i, upperRange,5 ,0)
-            print(minTime,maxTime)
+            # print(minTime,maxTime)
             data123=hourly_yahoo_data.objects.filter(Q(update_time__gte=minTime)&Q(update_time__lte=maxTime)&Q(chart = chart))
             #print("daata123",data123)
             dataUTC.extend(data123)
+          
             if(len(data123)):
                 weekdays.append(data123[0].update_time)
     if(len(dataUTC)):
      data1=dataUTC
+    # print('*************dataUTC Length************',len(data1))
     # elif(len(dataAnonymous)):
     #     data1=dataAnonymous
   
@@ -103,10 +105,14 @@ def y_data_ts_1(request,duration,country):
     # print(data2)
 
     # #### To fetch data of the specified interval we are running a simple for loop 
-    for i in range(1,len(data1)-1):
+    for i in range(0,len(data1)):
+        # print(i)
         if(i!=0):
             if((i+1)%interval==0):
                 data2.append(data1[i])
+        if(i==0):
+            data2.append(data1[0])
+    # print("******************final Data Length*****************",len(data2))
     # print(len(data2),data2[0])
     #######################Uncomment##################
     data5z=[]
