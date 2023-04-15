@@ -54,7 +54,7 @@ def y_data_ts_1(request,duration,country):
     data1=[]
     data2=[]
     weekdays=[]
-    lowerRange=14
+    lowerRange=13
     upperRange=20
     # print("chaart",chart)
     if(chart=='vk.pa' or chart=='tka.de' or chart=='szg.de'):
